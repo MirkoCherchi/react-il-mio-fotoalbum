@@ -1,14 +1,16 @@
 const { PrismaClient } = require("@prisma/client");
+const RestError = require("../utils/restError");
 const prisma = new PrismaClient();
 
-const store = async (req, res) => {
-  const { title, description, visible, categories } = req.body;
+const store = async (req, res, next) => {
+  const { title, description, visible, categories, userId } = req.body;
   try {
     const photo = await prisma.photo.create({
       data: {
         title,
         description,
         visible,
+        userId: Number(userId),
         categories: {
           connect: categories.map((categoryId) => ({ id: categoryId })),
         },
@@ -17,14 +19,15 @@ const store = async (req, res) => {
         categories: true,
       },
     });
+
     res.status(201).json(photo);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Errore durante la creazione della foto." });
+    next(new RestError("Errore durante la creazione della foto.", 500));
   }
 };
 
-const index = async (req, res) => {
+const index = async (req, res, next) => {
   try {
     const photos = await prisma.photo.findMany({
       include: {
@@ -34,11 +37,11 @@ const index = async (req, res) => {
     res.status(200).json(photos);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Errore durante il recupero delle foto." });
+    next(new RestError("Errore durante il recupero delle foto.", 500));
   }
 };
 
-const show = async (req, res) => {
+const show = async (req, res, next) => {
   const { id } = req.params;
   try {
     const photo = await prisma.photo.findUnique({
@@ -49,17 +52,17 @@ const show = async (req, res) => {
     });
 
     if (!photo) {
-      return res.status(404).json({ error: "Foto non trovata." });
+      return next(new RestError("Foto non trovata.", 404));
     }
 
     res.status(200).json(photo);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Errore durante il recupero della foto." });
+    next(new RestError("Errore durante il recupero della foto.", 500));
   }
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
   const { id } = req.params;
   const { title, description, visible, categoryId } = req.body;
   try {
@@ -86,13 +89,11 @@ const update = async (req, res) => {
     res.status(200).json(photo);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "Errore durante l'aggiornamento della foto." });
+    next(new RestError("Errore durante l'aggiornamento della foto.", 500));
   }
 };
 
-const destroy = async (req, res) => {
+const destroy = async (req, res, next) => {
   const { id } = req.params;
   try {
     const photo = await prisma.photo.delete({
@@ -105,9 +106,7 @@ const destroy = async (req, res) => {
     res.status(200).json({ message: "Foto eliminata con successo.", photo });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "Errore durante l'eliminazione della foto." });
+    next(new RestError("Errore durante l'eliminazione della foto.", 500));
   }
 };
 
