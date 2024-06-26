@@ -31,8 +31,8 @@ model Photo {
   description String
   img         String?
   visible     Boolean
-  userId      Int
-  user        User       @relation(fields: [userId], references: [id])
+  userId      Int?
+  user        User?      @relation(fields: [userId], references: [id])
   categories  Category[]
   createAt    DateTime   @default(now())
   updateAt    DateTime   @updatedAt
