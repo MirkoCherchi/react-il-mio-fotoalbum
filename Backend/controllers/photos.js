@@ -8,13 +8,21 @@ const store = async (req, res) => {
     const parsedCategories =
       typeof categories === "string" ? JSON.parse(categories) : categories;
 
+    let data = {
+      title,
+      description,
+      visible,
+      userId: Number(userId),
+    };
+
+    if (req.file) {
+      // Costruisci l'URL completo per l'immagine
+      data.img = `${req.protocol}://${req.get("host")}/${req.file.filename}`;
+    }
+
     const photo = await prisma.photo.create({
       data: {
-        title,
-        description,
-        visible,
-        userId: Number(userId),
-        img: req.file ? req.file.filename : null,
+        ...data,
         categories: {
           connect: parsedCategories.map((categoryId) => ({ id: categoryId })),
         },
