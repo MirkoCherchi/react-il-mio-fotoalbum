@@ -5,7 +5,7 @@ const errorHandler = require("./middlewares/errorHandler.js");
 const notFound = require("./middlewares/notFound.js");
 const photoRouter = require("./routers/photos");
 const categoriesRouter = require("./routers/categories");
-const authRouter = require("./routers/auth");
+const authRouter = require("./routers/auth.js");
 
 dotenv.config();
 const { PORT, HOST } = process.env;
@@ -17,11 +17,6 @@ const app = express();
 app.use(express.static("public"));
 app.use(cors());
 app.use(express.json());
-
-// Rotta Hello World
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 
 // Rotte
 app.use("/auth", authRouter);
@@ -36,6 +31,10 @@ app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server attivo su ${HOST}:${port}`);
+});
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
 module.exports = app;

@@ -11,11 +11,13 @@ const port = PORT || 3000;
 const register = async (req, res) => {
   try {
     const { email, name, password } = req.body;
+    const userImg = req.file ? req.file.filename : null;
 
     const data = {
       email,
       name,
       password: await hashPassword(password),
+      img_path: userImg,
     };
 
     const user = await prisma.user.create({ data });

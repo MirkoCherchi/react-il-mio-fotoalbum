@@ -3,10 +3,22 @@ const path = require("path");
 
 // Configurazione di multer
 const storage = multer.diskStorage({
-  destination: "public",
-  filename: (req, file, cf) => {
+  destination: (req, file, cb) => {
+    const fieldName = file.fieldname;
+
+    if (req.path === "/auth/register" && req.registerFailed) {
+      return cb(null, "");
+    }
+
+    let folder = "public/img";
+    if (fieldName === "userImg") {
+      folder = "public/user";
+    }
+    cb(null, folder);
+  },
+  filename: (req, file, cb) => {
     const fileType = path.extname(file.originalname);
-    cf(null, String(Date.now()) + fileType);
+    cb(null, String(Date.now()) + fileType);
   },
 });
 

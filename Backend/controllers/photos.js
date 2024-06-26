@@ -2,17 +2,21 @@ const { PrismaClient } = require("@prisma/client");
 const RestError = require("../utils/restError");
 const prisma = new PrismaClient();
 
-const store = async (req, res, next) => {
+const store = async (req, res) => {
   const { title, description, visible, categories, userId } = req.body;
   try {
+    const parsedCategories =
+      typeof categories === "string" ? JSON.parse(categories) : categories;
+
     const photo = await prisma.photo.create({
       data: {
         title,
         description,
         visible,
         userId: Number(userId),
+        img: req.file ? req.file.filename : null,
         categories: {
-          connect: categories.map((categoryId) => ({ id: categoryId })),
+          connect: parsedCategories.map((categoryId) => ({ id: categoryId })),
         },
       },
       include: {
@@ -23,7 +27,7 @@ const store = async (req, res, next) => {
     res.status(201).json(photo);
   } catch (error) {
     console.error(error);
-    next(new RestError("Errore durante la creazione della foto.", 500));
+    res.status(500).json({ error: "Errore durante la creazione della foto." });
   }
 };
 
