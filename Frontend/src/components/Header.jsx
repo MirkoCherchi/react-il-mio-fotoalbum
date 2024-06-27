@@ -1,4 +1,3 @@
-// Header.jsx
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../components/Auth/Context"; // Assicurati che il percorso sia corretto
@@ -8,7 +7,6 @@ const Header = () => {
 
   const handleLogout = () => {
     logout();
-    window.location.reload();
   };
 
   return (

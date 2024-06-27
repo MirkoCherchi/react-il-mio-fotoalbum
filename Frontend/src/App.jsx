@@ -1,4 +1,3 @@
-// App.jsx
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
@@ -10,8 +9,8 @@ import Register from "./components/Auth/Register";
 
 const App = () => {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <div>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -21,8 +20,8 @@ const App = () => {
             <Route path="/register" element={<Register />} />
           </Routes>
         </div>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 

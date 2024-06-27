@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import PhotoHomePage from "../assets/photo-HomePage.jpg"; // Corretto modo di importare l'immagine
+import PhotoHomePage from "../assets/photo-HomePage.jpg";
 
 const HomePage = () => {
   return (

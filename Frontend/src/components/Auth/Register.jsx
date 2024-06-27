@@ -1,31 +1,26 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../Header";
 
 const apiUrl = import.meta.env.VITE_BASE_API_URL;
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData(e.target);
+    const registerData = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+      img_path: formData.get("img_path"),
+    };
 
     try {
-      const response = await axios.post(`${apiUrl}/auth/register`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      const { token, data } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem(
-        "authData",
-        JSON.stringify({ isAuthenticated: true, user: data })
-      );
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      console.log("Registrazione avvenuta con successo:", data);
-      e.target.reset();
+      await axios.post(`${apiUrl}/auth/register`, registerData);
+      navigate("/login"); // Redirect to login page
     } catch (error) {
       console.error("Errore durante la registrazione:", error.message);
     }
