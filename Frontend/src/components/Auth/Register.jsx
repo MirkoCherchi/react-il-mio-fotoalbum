@@ -9,18 +9,14 @@ const Register = () => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    const registerData = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-      img_path: formData.get("img_path"),
-    };
 
     try {
-      const response = await axios.post(
-        `${apiUrl}/auth/register`,
-        registerData
-      );
+      const response = await axios.post(`${apiUrl}/auth/register`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       const { token, data } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem(

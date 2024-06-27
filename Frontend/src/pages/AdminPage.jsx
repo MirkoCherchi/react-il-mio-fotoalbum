@@ -9,7 +9,7 @@ const AdminPage = () => {
       <Header />
 
       {/* Main Content */}
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-4 py-32">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Left Column */}
           <section className="bg-gray-700 p-6 rounded-lg shadow-md">

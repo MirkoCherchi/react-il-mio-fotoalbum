@@ -1,9 +1,7 @@
-// components/Auth/Context.jsx
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_BASE_API_URL;
-console.log(apiUrl);
 
 const AuthContext = createContext();
 
@@ -24,7 +22,7 @@ const AuthProvider = ({ children }) => {
 
   const login = async (userData) => {
     try {
-      const response = await axios.post(`${apiUrl}/login`, userData);
+      const response = await axios.post(`${apiUrl}/auth/login`, userData);
       const { token, data } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem(
@@ -35,7 +33,7 @@ const AuthProvider = ({ children }) => {
       setUser(data);
       setIsAuthenticated(true);
     } catch (error) {
-      throw new Error(error.response.data.message || "User not found");
+      throw new Error(error.response.data.message || "Login failed");
     }
   };
 
