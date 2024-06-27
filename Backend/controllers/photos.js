@@ -44,6 +44,7 @@ const index = async (req, res, next) => {
     const photos = await prisma.photo.findMany({
       include: {
         categories: true,
+        user: true,
       },
     });
     res.status(200).json(photos);

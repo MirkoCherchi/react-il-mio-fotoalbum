@@ -108,7 +108,7 @@ const Photos = () => {
               </p>
 
               <p className="text-gray-400">
-                User: {photo.user?.name || "Unknown"}
+                Author: {photo.user?.name || "Unknown"}
               </p>
 
               <div className="mt-2">
