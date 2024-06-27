@@ -5,6 +5,7 @@ import AdminPage from "./pages/AdminPage";
 import { AuthProvider } from "./components/Auth/Context";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
+import Photos from "./components/Photos";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/photos" element={<Photos />} />
           </Routes>
         </div>
       </AuthProvider>

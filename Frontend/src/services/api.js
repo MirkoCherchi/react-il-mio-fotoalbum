@@ -1,5 +1,3 @@
-// api.js
-
 import axios from "axios";
 
 const BASE_URL = "http://localhost:3000";
@@ -11,6 +9,19 @@ const Api = {
       return response.data;
     } catch (error) {
       console.error("Errore durante il recupero delle foto:", error.message);
+      throw error;
+    }
+  },
+
+  getCategories: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/categories`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Errore durante il recupero delle categorie:",
+        error.message
+      );
       throw error;
     }
   },
