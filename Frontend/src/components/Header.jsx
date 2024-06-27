@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../components/Auth/Context"; // Assicurati che il percorso sia corretto
 
 const Header = () => {
-  const { isAuthenticated, logout } = useContext(AuthContext);
+  const { isAuthenticated, logout, user } = useContext(AuthContext); // Ottieni anche i dati dell'utente
 
   const handleLogout = () => {
     logout();
@@ -15,7 +15,27 @@ const Header = () => {
         <Link to="/" className="text-2xl font-bold">
           Photo App
         </Link>
-        <nav>
+        <nav className="flex items-center space-x-4">
+          {/* Link per il profilo utente */}
+          {isAuthenticated && user && (
+            <Link
+              to="/profile"
+              className="flex items-center space-x-2 hover:text-teal"
+            >
+              {/* Immagine profilo circolare */}
+              {user.img_path && (
+                <img
+                  className="rounded-full h-8 w-8"
+                  src={user.img_path}
+                  alt="Immagine profilo"
+                />
+              )}
+              {/* Nome dell'utente */}
+              <span>{user.name}</span>
+            </Link>
+          )}
+
+          {/* Altri link nell'header */}
           <ul className="flex space-x-4">
             <li>
               <Link to="/" className="hover:text-teal">

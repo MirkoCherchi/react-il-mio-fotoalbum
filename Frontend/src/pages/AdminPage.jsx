@@ -1,48 +1,128 @@
-import React from "react";
+import React, { useContext } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { AuthContext } from "../components/Auth/Context";
+import { Link } from "react-router-dom";
 
 const AdminPage = () => {
+  const { user, logout } = useContext(AuthContext);
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-black text-beige">
       {/* Header */}
       <Header />
 
       {/* Main Content */}
-      <main className="flex-1 container mx-auto px-4 py-32">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Left Column */}
-          <section className="bg-gray-700 p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-4">Manage Photos</h3>
-            <ul className="space-y-2">
+      <main className="flex-1 container mx-auto px-4 py-24 md:py-32">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Left Sidebar */}
+          <section className="md:col-span-1 bg-gray-800 p-6 rounded-lg shadow-lg">
+            <div className="flex items-center mb-8">
+              {user && user.img_path && (
+                <img
+                  className="rounded-full mr-4"
+                  src={user.img_path}
+                  alt="Immagine profilo"
+                  style={{ width: "80px", height: "80px" }}
+                />
+              )}
+              <div>
+                <h3 className="text-xl font-bold mb-2">
+                  {user ? user.name : "Utente"}
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  {user ? user.email : ""}
+                </p>
+              </div>
+            </div>
+            <ul className="space-y-4">
               <li>
-                <a href="#" className="hover:text-teal">
-                  Upload New Photo
-                </a>
+                <Link
+                  to="/"
+                  className="block py-2 px-4 bg-teal-500 text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-300"
+                >
+                  Home
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-teal">
-                  Edit Existing Photos
-                </a>
+                <Link
+                  to="/admin"
+                  className="block py-2 px-4 bg-teal-500 text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-300"
+                >
+                  Admin Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/photos"
+                  className="block py-2 px-4 bg-teal-500 text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-300"
+                >
+                  Gestisci Foto
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/categories"
+                  className="block py-2 px-4 bg-teal-500 text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-300"
+                >
+                  Gestisci Categorie
+                </Link>
+              </li>
+              <li>
+                <button
+                  onClick={handleLogout}
+                  className="block py-2 px-4 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+                >
+                  Logout
+                </button>
               </li>
             </ul>
           </section>
 
-          {/* Right Column */}
-          <section className="bg-gray-700 p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-4">Manage Categories</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-teal">
-                  Add New Category
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-teal">
-                  Edit Existing Categories
-                </a>
-              </li>
-            </ul>
+          {/* Main Content */}
+          <section className="md:col-span-2 bg-gray-900 p-6 rounded-lg shadow-lg">
+            <h2 className="text-3xl font-bold mb-8 text-center">
+              Benvenuto {user ? user.name : "Utente"} nella tua Area
+              Amministrativa
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Left Column */}
+              <div className="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 className="text-xl font-bold mb-4">Gestisci Foto</h3>
+                <ul className="space-y-2">
+                  <li>
+                    <Link to="/upload-photo" className="hover:text-teal">
+                      Carica Nuova Foto
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/edit-photos" className="hover:text-teal">
+                      Modifica Foto Esistenti
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Right Column */}
+              <div className="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 className="text-xl font-bold mb-4">Gestisci Categorie</h3>
+                <ul className="space-y-2">
+                  <li>
+                    <Link to="/add-category" className="hover:text-teal">
+                      Aggiungi Nuova Categoria
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/edit-categories" className="hover:text-teal">
+                      Modifica Categorie Esistenti
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </section>
         </div>
       </main>

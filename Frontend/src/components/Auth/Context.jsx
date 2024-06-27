@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,7 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const navigate = useNavigate(); // Utilizza useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,7 +34,7 @@ const AuthProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(data);
       setIsAuthenticated(true);
-      navigate("/admin"); // Redirect to admin page after login
+      navigate("/admin");
     } catch (error) {
       throw new Error(error.response.data.message || "Login failed");
     }
@@ -42,7 +42,18 @@ const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await axios.post(`${apiUrl}/auth/register`, userData);
+      const formData = new FormData();
+      formData.append("email", userData.email);
+      formData.append("name", userData.name);
+      formData.append("password", userData.password);
+      formData.append("img_path", userData.img_path);
+
+      const response = await axios.post(`${apiUrl}/auth/register`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       const { token, data } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem(
@@ -52,7 +63,7 @@ const AuthProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(data);
       setIsAuthenticated(true);
-      navigate("/login"); // Redirect to login page after registration
+      navigate("/login");
     } catch (error) {
       throw new Error(error.response.data.message || "Registration failed");
     }
@@ -64,7 +75,7 @@ const AuthProvider = ({ children }) => {
     delete axios.defaults.headers.common["Authorization"];
     setUser(null);
     setIsAuthenticated(false);
-    navigate("/"); // Redirect to homepage after logout
+    navigate("/");
   };
 
   return (

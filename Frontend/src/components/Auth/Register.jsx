@@ -17,10 +17,15 @@ const Register = () => {
       password: formData.get("password"),
       img_path: formData.get("img_path"),
     };
+    console.log(registerData);
 
     try {
-      await axios.post(`${apiUrl}/auth/register`, registerData);
-      navigate("/login"); // Redirect to login page
+      await axios.post(`${apiUrl}/auth/register`, registerData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      navigate("/login");
     } catch (error) {
       console.error("Errore durante la registrazione:", error.message);
     }
