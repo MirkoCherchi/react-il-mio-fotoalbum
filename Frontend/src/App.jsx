@@ -6,6 +6,7 @@ import { AuthProvider } from "./components/Auth/Context";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Photos from "./components/Photos";
+import PhotoForm from "./components/AdminPage/PhotoForm";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/photos" element={<Photos />} />
+            <Route path="/upload-photo" element={<PhotoForm />} />
           </Routes>
         </div>
       </AuthProvider>

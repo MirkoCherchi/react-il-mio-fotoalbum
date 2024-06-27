@@ -12,6 +12,19 @@ const Api = {
       throw error;
     }
   },
+  createPhoto: async (formData) => {
+    try {
+      const response = await axios.post("/api/photos", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Errore durante il caricamento della foto:", error);
+      throw error;
+    }
+  },
 
   getCategories: async () => {
     try {
