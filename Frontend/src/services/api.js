@@ -16,6 +16,19 @@ const Api = {
     }
   },
 
+  getPhotoById: async (id) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/photos/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Errore durante il recupero della foto ${id}:`,
+        error.message
+      );
+      throw error;
+    }
+  },
+
   // Funzione per creare una nuova foto
   createPhoto: async (formData) => {
     try {

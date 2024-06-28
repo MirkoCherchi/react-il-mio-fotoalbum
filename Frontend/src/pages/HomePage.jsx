@@ -28,16 +28,14 @@ const HomePage = () => {
                 to="/photos"
                 className="bg-teal-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-teal-600 transition duration-300"
               >
-                View All Photos
+                Vedi tutte le Foto
               </Link>
             </div>
           </section>
 
           {/* Right Column */}
           <section className="p-6 bg-gray-800 rounded-lg shadow-lg">
-            <h2 className="text-3xl font-bold mb-4 text-center">
-              Featured Photo
-            </h2>
+            <h2 className="text-3xl font-bold mb-4 text-center">Photo</h2>
             <div className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
               <img
                 src={PhotoHomePage}
