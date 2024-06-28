@@ -1,7 +1,10 @@
+// photoController.js
+
 const { PrismaClient } = require("@prisma/client");
 const RestError = require("../utils/restError");
 const prisma = new PrismaClient();
 
+// Funzione per creare una nuova foto
 const store = async (req, res) => {
   const {
     title,
@@ -50,9 +53,13 @@ const store = async (req, res) => {
   }
 };
 
+// Funzione per ottenere tutte le foto dell'utente loggato
 const index = async (req, res, next) => {
   try {
     const photos = await prisma.photo.findMany({
+      where: {
+        userId: req.userId, // Mostra solo le foto dell'utente loggato
+      },
       include: {
         categories: true,
         user: true,
@@ -65,6 +72,7 @@ const index = async (req, res, next) => {
   }
 };
 
+// Funzione per ottenere una singola foto
 const show = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -86,6 +94,7 @@ const show = async (req, res, next) => {
   }
 };
 
+// Funzione per aggiornare una foto esistente
 const update = async (req, res, next) => {
   const { id } = req.params;
   const { title, description, visible, categoryId } = req.body;
@@ -103,7 +112,7 @@ const update = async (req, res, next) => {
     }
 
     const photo = await prisma.photo.update({
-      where: { id: Number(id) },
+      where: { id: Number(id), userId: req.userId },
       data,
       include: {
         categories: true,
@@ -117,11 +126,12 @@ const update = async (req, res, next) => {
   }
 };
 
+// Funzione per eliminare una foto
 const destroy = async (req, res, next) => {
   const { id } = req.params;
   try {
     const photo = await prisma.photo.delete({
-      where: { id: Number(id) },
+      where: { id: Number(id), userId: req.userId },
       include: {
         categories: true,
       },

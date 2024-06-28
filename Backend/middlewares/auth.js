@@ -1,3 +1,6 @@
+const jwt = require("jsonwebtoken");
+const RestError = require("../utils/restError");
+
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
@@ -20,8 +23,8 @@ module.exports = (req, res, next) => {
       throw new RestError("Token non contiene userId", 403);
     }
 
-    req.userId = decoded.userId;
-    req.user = decoded;
+    req.userId = decoded.userId; // Aggiunge userId alla richiesta
+    req.user = decoded; // Opzionale: aggiunge tutte le informazioni utente decodificate
 
     next();
   });

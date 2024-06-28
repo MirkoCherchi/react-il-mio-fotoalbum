@@ -9,6 +9,7 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loggedInUserId, setLoggedInUserId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const AuthProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(authData.user);
       setIsAuthenticated(true);
+      setLoggedInUserId(authData.user.id);
     }
   }, []);
 
@@ -35,6 +37,7 @@ const AuthProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(data);
       setIsAuthenticated(true);
+      setLoggedInUserId(data.id);
       navigate("/admin");
     } catch (error) {
       console.error("Errore durante il login:", error);
@@ -65,6 +68,7 @@ const AuthProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(data);
       setIsAuthenticated(true);
+      setLoggedInUserId(data.id);
       navigate("/login");
     } catch (error) {
       throw new Error(error.response.data.message || "Registration failed");
@@ -77,12 +81,13 @@ const AuthProvider = ({ children }) => {
     delete axios.defaults.headers.common["Authorization"];
     setUser(null);
     setIsAuthenticated(false);
+    setLoggedInUserId(null);
     navigate("/");
   };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, login, register, logout }}
+      value={{ isAuthenticated, user, loggedInUserId, login, register, logout }}
     >
       {children}
     </AuthContext.Provider>
