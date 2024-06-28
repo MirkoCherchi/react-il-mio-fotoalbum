@@ -14,7 +14,7 @@ const Api = {
   },
   createPhoto: async (formData) => {
     try {
-      const response = await axios.post("/api/photos", formData, {
+      const response = await axios.post(`${BASE_URL}/photos`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

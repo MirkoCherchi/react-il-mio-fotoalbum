@@ -36,8 +36,26 @@ const bodyData = {
     },
     toBoolean: true,
   },
+  img: {
+    in: ["body"],
+    optional: {
+      options: { nullable: true },
+    },
+    isString: {
+      errorMessage: "img deve essere una stringa.",
+      bail: true,
+    },
+    matches: {
+      options: [/.(jpg|jpeg|png|gif)$/i],
+      errorMessage: "img deve avere un'estensione valida (jpg, jpeg, png, gif)",
+    },
+  },
   userId: {
     in: ["body"],
+    notEmpty: {
+      errorMessage: "User ID è un campo obbligatorio.",
+      bail: true,
+    },
     isInt: {
       errorMessage: "User ID deve essere un numero intero.",
     },

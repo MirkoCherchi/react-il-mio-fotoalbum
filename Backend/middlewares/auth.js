@@ -1,19 +1,23 @@
-const RestError = require("../utils/restError");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
-
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
+    console.error("Token non presente nella richiesta");
     throw new RestError("Token vuoto", 401);
   }
-  jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
+      console.error("Errore nella verifica del token:", err);
       throw new RestError("Token non valido", 403);
     }
-    req.user = data;
+
+    console.log("Token decodificato:", decoded);
+
+    req.userId = decoded.userId;
+    req.user = decoded;
+
     next();
   });
 };

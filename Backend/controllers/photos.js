@@ -3,7 +3,9 @@ const RestError = require("../utils/restError");
 const prisma = new PrismaClient();
 
 const store = async (req, res) => {
-  const { title, description, visible, categories, userId } = req.body;
+  const { title, description, visible, categories } = req.body;
+  const userId = req.userId;
+
   try {
     const parsedCategories =
       typeof categories === "string" ? JSON.parse(categories) : categories;
@@ -12,7 +14,7 @@ const store = async (req, res) => {
       title,
       description,
       visible,
-      userId: Number(userId),
+      userId: userId,
     };
 
     if (req.file) {
@@ -34,7 +36,7 @@ const store = async (req, res) => {
 
     res.status(201).json(photo);
   } catch (error) {
-    console.error(error);
+    console.error("Errore durante la creazione della foto:", error);
     res.status(500).json({ error: "Errore durante la creazione della foto." });
   }
 };

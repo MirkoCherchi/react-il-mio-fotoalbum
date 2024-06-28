@@ -3,10 +3,8 @@ const errorHandler = require("../middlewares/errorHandler.js");
 const generateToken = require("../utils/generateToken.js");
 const { hashPassword, comparePassword } = require("../utils/password.js");
 const RestError = require("../utils/restError.js");
+
 const prisma = new PrismaClient();
-require("dotenv").config();
-const { PORT, HOST } = process.env;
-const port = PORT || 3000;
 
 const register = async (req, res) => {
   try {
@@ -15,22 +13,22 @@ const register = async (req, res) => {
       ? `${req.protocol}://${req.get("host")}/${req.file.filename}`
       : null;
 
+    const hashedPassword = await hashPassword(password);
+
     const data = {
       email,
       name,
-      password: await hashPassword(password),
+      password: hashedPassword,
       img_path: userImg,
     };
 
     const user = await prisma.user.create({ data });
 
     const token = generateToken({
+      userId: user.id,
       email: user.email,
       name: user.name,
     });
-
-    delete user.id;
-    delete user.password;
 
     res.json({ token, data: user });
   } catch (err) {
@@ -58,13 +56,10 @@ const login = async (req, res) => {
     }
 
     const token = generateToken({
+      userId: user.id,
       email: user.email,
       name: user.name,
     });
-
-    delete user.id;
-    delete user.password;
-
     res.json({ token, data: user });
   } catch (err) {
     errorHandler(err, req, res);

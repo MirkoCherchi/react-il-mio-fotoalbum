@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Api from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../components/Auth/Context";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const PhotoForm = () => {
+  const { user } = useContext(AuthContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [visible, setVisible] = useState(true);
@@ -34,16 +36,19 @@ const PhotoForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log("UserId:", user.id);
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
     formData.append("visible", visible);
     formData.append("categories", JSON.stringify(selectedCategories));
     formData.append("image", image);
+    formData.append("userId", user.id);
 
     try {
       await Api.createPhoto(formData);
-      navigate("/photos"); // Redirect to photos page after successful submission
+      navigate("/photos"); //
     } catch (error) {
       console.error("Errore durante il caricamento della foto:", error.message);
       setError(error.message);

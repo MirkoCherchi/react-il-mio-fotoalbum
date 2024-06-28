@@ -26,6 +26,7 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${apiUrl}/auth/login`, userData);
       const { token, data } = response.data;
+      console.log("Token ricevuto:", token);
       localStorage.setItem("token", token);
       localStorage.setItem(
         "authData",
@@ -36,6 +37,7 @@ const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       navigate("/admin");
     } catch (error) {
+      console.error("Errore durante il login:", error);
       throw new Error(error.response.data.message || "Login failed");
     }
   };
