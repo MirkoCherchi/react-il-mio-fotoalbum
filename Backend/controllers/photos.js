@@ -3,8 +3,16 @@ const RestError = require("../utils/restError");
 const prisma = new PrismaClient();
 
 const store = async (req, res) => {
-  const { title, description, visible, categories } = req.body;
-  const userId = req.userId;
+  const {
+    title,
+    description,
+    visible,
+    categories,
+    userId: bodyUserId,
+  } = req.body;
+  const userId = req.userId || bodyUserId;
+
+  console.log("UserId ricevuto nel backend:", userId);
 
   try {
     const parsedCategories =
@@ -18,9 +26,10 @@ const store = async (req, res) => {
     };
 
     if (req.file) {
-      // Costruisci l'URL completo per l'immagine
       data.img = `${req.protocol}://${req.get("host")}/${req.file.filename}`;
     }
+
+    console.log("Data per la creazione:", data);
 
     const photo = await prisma.photo.create({
       data: {

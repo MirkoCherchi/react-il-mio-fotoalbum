@@ -15,6 +15,11 @@ module.exports = (req, res, next) => {
 
     console.log("Token decodificato:", decoded);
 
+    if (!decoded.userId) {
+      console.error("Nessun userId trovato nel token");
+      throw new RestError("Token non contiene userId", 403);
+    }
+
     req.userId = decoded.userId;
     req.user = decoded;
 

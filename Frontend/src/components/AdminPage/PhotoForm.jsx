@@ -36,7 +36,7 @@ const PhotoForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("UserId:", user.id);
+    console.log("UserId nel form:", user.id);
 
     const formData = new FormData();
     formData.append("title", title);
@@ -47,8 +47,10 @@ const PhotoForm = () => {
     formData.append("userId", user.id);
 
     try {
+      console.log("FormData:", formData);
+
       await Api.createPhoto(formData);
-      navigate("/photos"); //
+      navigate("/photos");
     } catch (error) {
       console.error("Errore durante il caricamento della foto:", error.message);
       setError(error.message);
