@@ -13,6 +13,7 @@ const PhotoUpdate = () => {
   const [img, setImg] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [visible, setVisible] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -32,8 +33,9 @@ const PhotoUpdate = () => {
         setSelectedCategories(
           photoData.categories ? photoData.categories.map((cat) => cat.id) : []
         );
+        setVisible(photoData.visible);
       } catch (error) {
-        console.error("Errore durante il recupero della foto:", error.message);
+        console.error("Error retrieving photo:", error.message);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -51,20 +53,17 @@ const PhotoUpdate = () => {
         id,
         title,
         description,
-        img,
         tags: tags.split(",").map((tag) => tag.trim()),
         categories: selectedCategories,
-        visible: true,
+        visible,
         userId: 123,
       };
-      console.log("Payload della richiesta di aggiornamento:", updatedPhoto);
+
+      console.log("Update request payload:", updatedPhoto);
       await Api.updatePhoto(id, updatedPhoto);
       navigate("/edit-photos");
     } catch (error) {
-      console.error(
-        "Errore durante l'aggiornamento della foto:",
-        error.message
-      );
+      console.error("Error updating photo:", error.message);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -82,101 +81,126 @@ const PhotoUpdate = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="bg-black min-h-screen text-white">
+    <div className="bg-gray-900 min-h-screen text-white">
       <Header />
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Modifica Foto</h1>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        {photo && (
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label
-                htmlFor="title"
-                className="block text-lg font-medium text-gray-700"
-              >
-                Titolo
-              </label>
-              <input
-                type="text"
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full mt-1 p-2 border rounded-md bg-beige text-black"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="description"
-                className="block text-lg font-medium text-gray-700"
-              >
-                Descrizione
-              </label>
-              <textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full mt-1 p-2 border rounded-md bg-beige text-black"
-                rows={4}
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="img"
-                className="block text-lg font-medium text-gray-700"
-              >
-                Immagine
-              </label>
-              <div className="mt-2">
-                {img && (
-                  <img
-                    src={img}
-                    alt="Preview"
-                    className="max-w-xs max-h-64 object-contain"
-                  />
-                )}
+      <main className="container mx-auto px-4 py-24">
+        <div className="max-w-xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+          <h1 className="text-3xl font-bold mb-6 text-center text-teal-400">
+            Modifica Foto
+          </h1>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {photo && (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="title"
+                  className="block text-gray-400 font-medium"
+                >
+                  Titolo
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full mt-1 p-3 border rounded-md bg-gray-700 text-white focus:outline-none focus:ring focus:border-teal-400"
+                  required
+                />
               </div>
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="categories"
-                className="block text-lg font-medium text-gray-700"
-              >
-                Categorie
-              </label>
-              <div className="flex flex-wrap mt-1">
-                {categories.map((category) => (
-                  <label
-                    key={category.id}
-                    className="flex items-center mr-4 mb-2"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedCategories.includes(category.id)}
-                      onChange={() => handleCategoryChange(category.id)}
-                      className="form-checkbox h-5 w-5 text-teal-600"
+              <div>
+                <label
+                  htmlFor="description"
+                  className="block text-gray-400 font-medium"
+                >
+                  Descrizione
+                </label>
+                <textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="w-full mt-1 p-3 border rounded-md bg-gray-700 text-white focus:outline-none focus:ring focus:border-teal-400"
+                  rows={4}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="img"
+                  className="block text-gray-400 font-medium"
+                >
+                  Immagine
+                </label>
+                <div className="mt-2">
+                  {img && (
+                    <img
+                      src={img}
+                      alt="Preview"
+                      className="w-full h-48 object-cover rounded-md"
                     />
-                    <span className="ml-2">{category.name}</span>
-                  </label>
-                ))}
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="mt-6">
-              <button
-                type="submit"
-                className="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600"
-              >
-                Salva Modifiche
-              </button>
-              <Link
-                to="/admin/photos"
-                className="ml-4 text-teal-500 hover:text-teal-600"
-              >
-                Annulla
-              </Link>
-            </div>
-          </form>
-        )}
+              <div>
+                <label
+                  htmlFor="categories"
+                  className="block text-gray-400 font-medium"
+                >
+                  Categorie
+                </label>
+                <div className="grid grid-cols-2 gap-2 mt-1">
+                  {categories.map((category) => (
+                    <label
+                      key={category.id}
+                      className="flex items-center text-gray-300"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(category.id)}
+                        onChange={() => handleCategoryChange(category.id)}
+                        className="form-checkbox h-5 w-5 text-teal-400"
+                      />
+                      <span className="ml-2">{category.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <label
+                    htmlFor="visible"
+                    className="block text-gray-400 font-medium"
+                  >
+                    Visibilità
+                  </label>
+                  <div className="mt-2">
+                    <label className="inline-flex items-center text-gray-300">
+                      <input
+                        type="checkbox"
+                        checked={visible}
+                        onChange={() => setVisible(!visible)}
+                        className="form-checkbox h-5 w-5 text-teal-400"
+                      />
+                      <span className="ml-2">Visibile</span>
+                    </label>
+                  </div>
+                </div>
+                <div className="flex items-center pt-24">
+                  <button
+                    type="submit"
+                    className="bg-teal-500 text-white px-6 py-3 rounded-md hover:bg-teal-600 mr-4"
+                  >
+                    Salva Modifiche
+                  </button>
+                  <Link
+                    to="/admin/photos"
+                    className="text-teal-400 hover:text-teal-300"
+                  >
+                    Annulla
+                  </Link>
+                </div>
+              </div>
+            </form>
+          )}
+        </div>
       </main>
       <Footer />
     </div>
