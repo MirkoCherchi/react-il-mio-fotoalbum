@@ -97,7 +97,8 @@ const show = async (req, res, next) => {
 // Funzione per aggiornare una foto esistente
 const update = async (req, res, next) => {
   const { id } = req.params;
-  const { title, description, visible, categoryId } = req.body;
+  const { title, description, visible, categories } = req.body;
+
   try {
     let data = {
       title,
@@ -105,14 +106,17 @@ const update = async (req, res, next) => {
       visible,
     };
 
-    if (categoryId) {
+    // Gestione delle categorie
+    if (categories) {
+      const parsedCategories =
+        typeof categories === "string" ? JSON.parse(categories) : categories;
       data.categories = {
-        set: { id: categoryId },
+        set: parsedCategories.map((categoryId) => ({ id: categoryId })),
       };
     }
 
     const photo = await prisma.photo.update({
-      where: { id: Number(id), userId: req.userId },
+      where: { id: Number(id) },
       data,
       include: {
         categories: true,

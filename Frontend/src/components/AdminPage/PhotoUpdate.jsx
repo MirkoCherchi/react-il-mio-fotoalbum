@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom"; // Importa useNavigate
+import { useParams, Link, useNavigate } from "react-router-dom";
 import Api from "../../services/api";
 import Header from "../Header";
 import Footer from "../Footer";
 
 const PhotoUpdate = () => {
-  const { id } = useParams(); // Recupera l'ID della foto dalla URL
+  const { id } = useParams();
   const [photo, setPhoto] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [img, setImg] = useState("");
   const [tags, setTags] = useState("");
+  const [img, setImg] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // Ottieni la funzione navigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPhoto = async () => {
@@ -54,12 +54,12 @@ const PhotoUpdate = () => {
         img,
         tags: tags.split(",").map((tag) => tag.trim()),
         categories: selectedCategories,
-        visible: true, // Esempio di valore booleano per 'visible'
-        userId: 123, // Sostituisci con l'ID dell'utente corrente
+        visible: true,
+        userId: 123,
       };
+      console.log("Payload della richiesta di aggiornamento:", updatedPhoto);
       await Api.updatePhoto(id, updatedPhoto);
-      // Dopo aver aggiornato con successo, esegui il redirect
-      navigate("/edit-photos"); // Redirect alla pagina desiderata
+      navigate("/edit-photos");
     } catch (error) {
       console.error(
         "Errore durante l'aggiornamento della foto:",
@@ -71,19 +71,12 @@ const PhotoUpdate = () => {
     }
   };
 
-  const handleCategoryChange = (e) => {
-    const { options } = e.target;
-    const selectedCategories = Array.from(options)
-      .filter((option) => option.selected)
-      .map((option) => parseInt(option.value));
-    setSelectedCategories(selectedCategories);
-  };
-
-  const handleRemoveCategory = (categoryId) => {
-    const updatedSelectedCategories = selectedCategories.filter(
-      (catId) => catId !== categoryId
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategories((prevSelectedCategories) =>
+      prevSelectedCategories.includes(categoryId)
+        ? prevSelectedCategories.filter((id) => id !== categoryId)
+        : [...prevSelectedCategories, categoryId]
     );
-    setSelectedCategories(updatedSelectedCategories);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -132,16 +125,8 @@ const PhotoUpdate = () => {
                 htmlFor="img"
                 className="block text-lg font-medium text-gray-700"
               >
-                URL dell'immagine
+                Immagine
               </label>
-              <input
-                type="text"
-                id="img"
-                value={img}
-                onChange={(e) => setImg(e.target.value)}
-                className="w-full mt-1 p-2 border rounded-md bg-beige text-black"
-                required
-              />
               <div className="mt-2">
                 {img && (
                   <img
@@ -161,39 +146,20 @@ const PhotoUpdate = () => {
               </label>
               <div className="flex flex-wrap mt-1">
                 {categories.map((category) => (
-                  <div
+                  <label
                     key={category.id}
-                    className={`bg-gray-200 text-gray-800 px-3 py-1 rounded-full m-1 flex items-center ${
-                      selectedCategories.includes(category.id)
-                        ? "bg-teal-500"
-                        : ""
-                    }`}
+                    className="flex items-center mr-4 mb-2"
                   >
-                    <span>{category.name}</span>
-                    <button
-                      type="button"
-                      className="ml-2 text-sm text-red-600 focus:outline-none"
-                      onClick={() => handleRemoveCategory(category.id)}
-                    >
-                      &times;
-                    </button>
-                  </div>
+                    <input
+                      type="checkbox"
+                      checked={selectedCategories.includes(category.id)}
+                      onChange={() => handleCategoryChange(category.id)}
+                      className="form-checkbox h-5 w-5 text-teal-600"
+                    />
+                    <span className="ml-2">{category.name}</span>
+                  </label>
                 ))}
               </div>
-              <select
-                id="categories"
-                value={selectedCategories}
-                onChange={handleCategoryChange}
-                className="w-full mt-2 p-2 border rounded-md bg-beige text-black"
-                multiple
-                required
-              >
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
             </div>
             <div className="mt-6">
               <button
