@@ -1,5 +1,3 @@
-// src/services/api.js
-
 import axios from "axios";
 
 const BASE_URL = "http://localhost:3000"; // Assicurati che questo URL sia corretto
@@ -16,10 +14,19 @@ const Api = {
     }
   },
 
+  // Funzione per ottenere una foto specifica per ID
   getPhotoById: async (id) => {
     try {
       const response = await axios.get(`${BASE_URL}/photos/${id}`);
-      return response.data;
+      const photoData = response.data;
+
+      // Eseguire una chiamata separata per ottenere i dettagli dell'utente
+      const userData = await Api.getUserProfile(photoData.userId); // Assicurati di usare la funzione corretta per ottenere il profilo dell'utente
+
+      // Aggiungi i dettagli dell'utente ai dati della foto
+      photoData.user = userData;
+
+      return photoData;
     } catch (error) {
       console.error(
         `Errore durante il recupero della foto ${id}:`,

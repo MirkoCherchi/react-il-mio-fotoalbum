@@ -58,7 +58,7 @@ const index = async (req, res, next) => {
   try {
     const photos = await prisma.photo.findMany({
       where: {
-        userId: req.userId, // Mostra solo le foto dell'utente loggato
+        userId: req.userId,
       },
       include: {
         categories: true,
@@ -80,6 +80,7 @@ const show = async (req, res, next) => {
       where: { id: Number(id) },
       include: {
         categories: true,
+        user: true,
       },
     });
 
@@ -92,6 +93,10 @@ const show = async (req, res, next) => {
     console.error(error);
     next(new RestError("Errore durante il recupero della foto.", 500));
   }
+};
+
+module.exports = {
+  show,
 };
 
 // Funzione per aggiornare una foto esistente

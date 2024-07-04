@@ -10,6 +10,7 @@ import PhotoForm from "./components/AdminPage/PhotoForm";
 import PhotoManagement from "./components/AdminPage/PhotoManagement";
 import UpdatePhoto from "./components/AdminPage/PhotoUpdate";
 import ProfilePage from "./pages/ProfilePage";
+import SinglePhoto from "./pages/SinglePhoto";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/edit-photos" element={<PhotoManagement />} />
             <Route path="/admin/photos/:id/edit" element={<UpdatePhoto />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/photos/:id" element={<SinglePhoto />} />
           </Routes>
         </div>
       </AuthProvider>

@@ -3,6 +3,7 @@ import { AuthContext } from "../components/Auth/Context";
 import Header from "../components/Header";
 import Api from "../services/api";
 import { Link } from "react-router-dom";
+import { FiUser, FiCalendar, FiCamera } from "react-icons/fi";
 
 const ProfilePage = () => {
   const { user } = useContext(AuthContext);
@@ -52,7 +53,7 @@ const ProfilePage = () => {
     <>
       <Header />
       <div className="bg-gray-900 min-h-screen text-white">
-        <div className="container mx-auto py-32 px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto py-36 px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className="px-6 py-8">
               <div className="flex items-center justify-center">
@@ -72,14 +73,17 @@ const ProfilePage = () => {
             <div className="border-t border-gray-200 px-6 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
-                  <p className="text-lg font-semibold text-gray-900">Nome</p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    <FiUser className="inline-block mb-1 text-xl" /> Nome
+                  </p>
                   <p className="text-lg text-gray-600">
                     {profile?.name || "username"}
                   </p>
                 </div>
                 <div className="text-center">
                   <p className="text-lg font-semibold text-gray-900">
-                    Data di Registrazione
+                    <FiCalendar className="inline-block mb-1 text-xl" /> Data di
+                    Registrazione
                   </p>
                   <p className="text-lg text-gray-600">
                     {profile
@@ -95,7 +99,8 @@ const ProfilePage = () => {
                   className="block rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 ease-in-out"
                 >
                   <p className="text-lg font-semibold text-gray-900">
-                    Numero di Foto
+                    <FiCamera className="inline-block mb-1 text-xl" /> Numero di
+                    Foto
                   </p>
                   <p className="text-lg text-gray-600 pb-4">
                     {profile?.photoCount || 0}
