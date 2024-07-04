@@ -191,7 +191,7 @@ const PhotoUpdate = () => {
                     Salva Modifiche
                   </button>
                   <Link
-                    to="/admin/photos"
+                    to="/edit-photos"
                     className="text-teal-400 hover:text-teal-300"
                   >
                     Annulla

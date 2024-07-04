@@ -9,6 +9,7 @@ import Photos from "./components/Photos";
 import PhotoForm from "./components/AdminPage/PhotoForm";
 import PhotoManagement from "./components/AdminPage/PhotoManagement";
 import UpdatePhoto from "./components/AdminPage/PhotoUpdate";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
             <Route path="/upload-photo" element={<PhotoForm />} />
             <Route path="/edit-photos" element={<PhotoManagement />} />
             <Route path="/admin/photos/:id/edit" element={<UpdatePhoto />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </div>
       </AuthProvider>

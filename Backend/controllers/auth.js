@@ -1,10 +1,9 @@
 const { PrismaClient } = require("@prisma/client");
-const errorHandler = require("../middlewares/errorHandler.js");
-const generateToken = require("../utils/generateToken.js");
-const { hashPassword, comparePassword } = require("../utils/password.js");
-const RestError = require("../utils/restError.js");
-
 const prisma = new PrismaClient();
+const errorHandler = require("../middlewares/errorHandler");
+const generateToken = require("../utils/generateToken");
+const { hashPassword, comparePassword } = require("../utils/password");
+const RestError = require("../utils/restError");
 
 const register = async (req, res) => {
   try {

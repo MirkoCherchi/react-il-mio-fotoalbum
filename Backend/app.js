@@ -6,6 +6,7 @@ const notFound = require("./middlewares/notFound.js");
 const photoRouter = require("./routers/photos");
 const categoriesRouter = require("./routers/categories");
 const authRouter = require("./routers/auth.js");
+const userRouter = require("./routers/user");
 
 dotenv.config();
 const { PORT, HOST } = process.env;
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/photos", photoRouter);
 app.use("/categories", categoriesRouter);
+app.use("/user", userRouter);
 
 // Middleware per gestire errori 404
 app.use(notFound);

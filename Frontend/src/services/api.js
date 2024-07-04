@@ -85,6 +85,20 @@ const Api = {
       throw error;
     }
   },
+
+  // Funzione per ottenere il profilo utente
+  getUserProfile: async (userId) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/user/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Errore durante il recupero del profilo utente ${userId}:`,
+        error.message
+      );
+      throw error;
+    }
+  },
 };
 
 export default Api;
