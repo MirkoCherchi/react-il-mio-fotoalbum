@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../components/Auth/Context";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import Select from "react-select";
 
 const PhotoForm = () => {
   const { user } = useContext(AuthContext);
@@ -42,7 +43,10 @@ const PhotoForm = () => {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("visible", visible);
-    formData.append("categories", JSON.stringify(selectedCategories));
+    formData.append(
+      "categories",
+      JSON.stringify(selectedCategories.map((cat) => cat.value))
+    );
     formData.append("image", image);
     formData.append("userId", user.id);
 
@@ -57,20 +61,13 @@ const PhotoForm = () => {
     }
   };
 
-  const handleCategoryChange = (categoryId) => {
-    setSelectedCategories((prevSelected) =>
-      prevSelected.includes(categoryId)
-        ? prevSelected.filter((id) => id !== categoryId)
-        : [...prevSelected, categoryId]
-    );
+  const handleCategoryChange = (selectedOptions) => {
+    setSelectedCategories(selectedOptions);
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-black text-beige">
-      {/* Header */}
       <Header />
-
-      {/* Main Content */}
       <main className="flex-1 container mx-auto px-4 py-24 md:py-32">
         <h1 className="text-3xl font-bold mb-8 text-center text-white">
           Carica una Nuova Foto
@@ -119,26 +116,16 @@ const PhotoForm = () => {
             <label htmlFor="categories" className="block text-white text-lg">
               Categorie
             </label>
-            <div className="grid grid-cols-2 gap-4">
-              {categories.map((category) => (
-                <div key={category.id} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={`category-${category.id}`}
-                    value={category.id}
-                    checked={selectedCategories.includes(category.id)}
-                    onChange={() => handleCategoryChange(category.id)}
-                    className="mr-2"
-                  />
-                  <label
-                    htmlFor={`category-${category.id}`}
-                    className="text-white"
-                  >
-                    {category.name}
-                  </label>
-                </div>
-              ))}
-            </div>
+            <Select
+              isMulti
+              options={categories.map((category) => ({
+                value: category.id,
+                label: category.name,
+              }))}
+              value={selectedCategories}
+              onChange={handleCategoryChange}
+              className="text-black"
+            />
           </div>
           <div>
             <label htmlFor="image" className="block text-white text-lg">
@@ -161,8 +148,6 @@ const PhotoForm = () => {
           </button>
         </form>
       </main>
-
-      {/* Footer */}
       <Footer />
     </div>
   );

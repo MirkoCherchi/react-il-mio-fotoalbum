@@ -5,6 +5,14 @@ const store = async (req, res) => {
   const { name } = req.body;
 
   try {
+    const existingCategory = await prisma.category.findFirst({
+      where: { name },
+    });
+
+    if (existingCategory) {
+      return res.status(400).json({ error: "Categoria già esistente." });
+    }
+
     const category = await prisma.category.create({
       data: {
         name,
@@ -12,7 +20,7 @@ const store = async (req, res) => {
     });
     res.status(201).json(category);
   } catch (error) {
-    console.error(error);
+    console.error("Errore durante la creazione della categoria:", error);
     res
       .status(500)
       .json({ error: "Errore durante la creazione della categoria." });
@@ -24,7 +32,7 @@ const index = async (req, res) => {
     const categories = await prisma.category.findMany();
     res.status(200).json(categories);
   } catch (error) {
-    console.error(error);
+    console.error("Errore durante il recupero delle categorie:", error);
     res
       .status(500)
       .json({ error: "Errore durante il recupero delle categorie." });
@@ -44,7 +52,7 @@ const show = async (req, res) => {
 
     res.status(200).json(category);
   } catch (error) {
-    console.error(error);
+    console.error("Errore durante il recupero della categoria:", error);
     res
       .status(500)
       .json({ error: "Errore durante il recupero della categoria." });
@@ -61,7 +69,7 @@ const destroy = async (req, res) => {
       .status(200)
       .json({ message: "Categoria eliminata con successo.", category });
   } catch (error) {
-    console.error(error);
+    console.error("Errore durante l'eliminazione della categoria:", error);
     res
       .status(500)
       .json({ error: "Errore durante l'eliminazione della categoria." });

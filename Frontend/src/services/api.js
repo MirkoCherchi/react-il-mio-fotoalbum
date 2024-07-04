@@ -93,6 +93,10 @@ const Api = {
     }
   },
 
+  addCategory: (categoryData) => {
+    return axios.post(`${BASE_URL}/categories`, categoryData);
+  },
+
   // Funzione per ottenere il profilo utente
   getUserProfile: async (userId) => {
     try {

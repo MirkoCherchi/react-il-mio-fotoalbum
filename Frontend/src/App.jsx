@@ -11,6 +11,7 @@ import PhotoManagement from "./components/AdminPage/PhotoManagement";
 import UpdatePhoto from "./components/AdminPage/PhotoUpdate";
 import ProfilePage from "./pages/ProfilePage";
 import SinglePhoto from "./pages/SinglePhoto";
+import AddCategory from "./pages/AddCategory";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
             <Route path="/admin/photos/:id/edit" element={<UpdatePhoto />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/photos/:id" element={<SinglePhoto />} />
+            <Route path="/add-category" element={<AddCategory />} />
           </Routes>
         </div>
       </AuthProvider>
