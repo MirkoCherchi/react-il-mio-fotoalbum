@@ -12,6 +12,8 @@ import UpdatePhoto from "./components/AdminPage/PhotoUpdate";
 import ProfilePage from "./pages/ProfilePage";
 import SinglePhoto from "./pages/SinglePhoto";
 import AddCategory from "./pages/AddCategory";
+import AllCategories from "./pages/AllCategories";
+import CategoryPhotos from "./pages/CategoryPhotos";
 
 const App = () => {
   return (
@@ -31,6 +33,11 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/photos/:id" element={<SinglePhoto />} />
             <Route path="/add-category" element={<AddCategory />} />
+            <Route path="/categories" element={<AllCategories />} />
+            <Route
+              path="/categories/:categoryId/photos"
+              element={<CategoryPhotos />}
+            />
           </Routes>
         </div>
       </AuthProvider>

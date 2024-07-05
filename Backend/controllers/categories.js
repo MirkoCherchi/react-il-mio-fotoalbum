@@ -75,5 +75,46 @@ const destroy = async (req, res) => {
       .json({ error: "Errore durante l'eliminazione della categoria." });
   }
 };
+const getPhotosByCategory = async (req, res, next) => {
+  const { categoryId } = req.params;
 
-module.exports = { store, index, show, destroy };
+  try {
+    const photos = await prisma.photo.findMany({
+      where: {
+        categories: {
+          some: {
+            id: Number(categoryId),
+          },
+        },
+      },
+      include: {
+        categories: true,
+        user: true,
+      },
+    });
+
+    if (!photos.length) {
+      return res
+        .status(200)
+        .json({
+          message: "Nessuna foto trovata per questa categoria.",
+          photos: [],
+        });
+    }
+
+    res.status(200).json(photos);
+  } catch (error) {
+    console.error(
+      `Errore durante il recupero delle foto per la categoria ${categoryId}:`,
+      error
+    );
+    next(
+      new RestError(
+        "Errore durante il recupero delle foto per la categoria.",
+        500
+      )
+    );
+  }
+};
+
+module.exports = { store, index, show, destroy, getPhotosByCategory };

@@ -92,6 +92,21 @@ const Api = {
       throw error;
     }
   },
+  getPhotosByCategory: async (categoryId) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/categories/${categoryId}/photos`
+      );
+      console.log("Risposta dalla API:", response.data); // Controlla cosa restituisce la API
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Errore durante il recupero delle foto per la categoria ${categoryId}:`,
+        error.message
+      );
+      throw error;
+    }
+  },
 
   addCategory: (categoryData) => {
     return axios.post(`${BASE_URL}/categories`, categoryData);

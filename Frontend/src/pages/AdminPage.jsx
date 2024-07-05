@@ -70,7 +70,7 @@ const AdminPage = () => {
                   to="/categories"
                   className="flex items-center py-2 px-4 bg-teal-500 text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-300"
                 >
-                  <FiEdit className="mr-2" /> Gestisci Categorie
+                  <FiEye className="mr-2" /> Visualizza tutte le Categorie
                 </Link>
               </li>
               <li>
