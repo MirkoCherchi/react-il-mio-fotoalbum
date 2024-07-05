@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import PhotoHomePage from "../assets/photo-HomePage.jpg";
@@ -8,15 +8,16 @@ import { AuthContext } from "../components/Auth/Context";
 
 const HomePage = () => {
   const { isAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
     // Logic to redirect based on authentication status
     if (isAuthenticated) {
-      // User is authenticated, redirect to upload photo page
-      window.location.href = "/upload-photo";
+      // User is authenticated, navigate to upload photo page
+      navigate("/upload-photo");
     } else {
-      // User is not authenticated, redirect to login page
-      window.location.href = "/login";
+      // User is not authenticated, navigate to login page
+      navigate("/login");
     }
   };
 
