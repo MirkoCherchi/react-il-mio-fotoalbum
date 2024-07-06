@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000"; // Assicurati che questo URL sia corretto
+const BASE_URL = "http://localhost:3000";
 
 const Api = {
-  // Funzione per ottenere tutte le foto dell'utente loggato
+  // Funzione per ottenere tutte le foto
   getPhotos: async () => {
     try {
       const response = await axios.get(`${BASE_URL}/photos`);
@@ -14,7 +14,7 @@ const Api = {
     }
   },
 
-  // Funzione per ottenere una foto specifica per ID
+  // Funzione per ottenere una foto per ID
   getPhotoById: async (id) => {
     try {
       const response = await axios.get(`${BASE_URL}/photos/${id}`);
@@ -30,6 +30,21 @@ const Api = {
     } catch (error) {
       console.error(
         `Errore durante il recupero della foto ${id}:`,
+        error.message
+      );
+      throw error;
+    }
+  },
+
+  // Funzione per ottenere le foto dell'utente loggato
+  getPhotosByUser: async (userId) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/photos`);
+      const photos = response.data.filter((photo) => photo.userId === userId);
+      return photos;
+    } catch (error) {
+      console.error(
+        `Errore durante il recupero delle foto per l'utente ${userId}:`,
         error.message
       );
       throw error;
@@ -92,12 +107,13 @@ const Api = {
       throw error;
     }
   },
+
+  // Funzione per ottenere le foto per una categoria specifica
   getPhotosByCategory: async (categoryId) => {
     try {
       const response = await axios.get(
         `${BASE_URL}/categories/${categoryId}/photos`
       );
-      console.log("Risposta dalla API:", response.data); // Controlla cosa restituisce la API
       return response.data;
     } catch (error) {
       console.error(
@@ -108,8 +124,18 @@ const Api = {
     }
   },
 
-  addCategory: (categoryData) => {
-    return axios.post(`${BASE_URL}/categories`, categoryData);
+  // Funzione per aggiungere una nuova categoria
+  addCategory: async (categoryData) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/categories`, categoryData);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Errore durante l'aggiunta della categoria:",
+        error.message
+      );
+      throw error;
+    }
   },
 
   // Funzione per ottenere il profilo utente
