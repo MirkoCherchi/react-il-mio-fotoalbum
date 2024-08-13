@@ -1,75 +1,128 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../components/Auth/Context"; // Assicurati che il percorso sia corretto
+import { NavLink } from "react-router-dom";
+import { AuthContext } from "../components/Auth/Context";
 
 const Header = () => {
-  const { isAuthenticated, logout, user } = useContext(AuthContext); // Ottieni anche i dati dell'utente
+  const { isAuthenticated, logout, user } = useContext(AuthContext);
 
   const handleLogout = () => {
     logout();
   };
 
   return (
-    <header className="bg-black text-beige py-4 fixed top-0 left-0 right-0 z-50">
+    <header className="bg-black text-white py-4 fixed top-0 left-0 right-0 z-50 shadow-md">
       <div className="container mx-auto flex justify-between items-center px-4">
-        <Link to="/" className="text-2xl font-bold">
+        {/* Logo o nome dell'app */}
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `text-3xl font-bold ${
+              isActive
+                ? "text-teal-300 border-b-2 border-white"
+                : "text-teal-400 hover:text-teal-500"
+            } transition-colors duration-300`
+          }
+        >
           Photo App
-        </Link>
-        <nav className="flex items-center space-x-4">
+        </NavLink>
+
+        <nav className="flex items-center space-x-6">
           {/* Link per il profilo utente */}
           {isAuthenticated && user && (
-            <Link
+            <NavLink
               to="/profile"
-              className="flex items-center space-x-2 hover:text-teal"
+              className={({ isActive }) =>
+                `flex items-center space-x-2 text-lg transition-colors duration-300 ${
+                  isActive
+                    ? "text-teal-300 border-b-2 border-white"
+                    : "hover:text-teal-500"
+                }`
+              }
             >
-              {/* Immagine profilo circolare */}
+              {/* Immagine profilo circolare con bordo */}
               {user.img_path && (
                 <img
-                  className="rounded-full h-8 w-8"
+                  className="rounded-full h-10 w-10 border-2 border-teal-400"
                   src={user.img_path}
                   alt="Immagine profilo"
                 />
               )}
-              {/* Nome dell'utente */}
-              <span>{user.name}</span>
-            </Link>
+              {/* Nome dell'utente con font-bold */}
+              <span className="font-bold">{user.name}</span>
+            </NavLink>
           )}
 
           {/* Altri link nell'header */}
-          <ul className="flex space-x-4">
+          <ul className="flex space-x-6">
             <li>
-              <Link to="/" className="hover:text-teal">
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `text-lg transition-colors duration-300 ${
+                    isActive
+                      ? "text-teal-300 border-b-2 border-white"
+                      : "hover:text-teal-500"
+                  }`
+                }
+              >
                 Home
-              </Link>
+              </NavLink>
             </li>
             {isAuthenticated && (
               <li>
-                <Link to="/admin" className="hover:text-teal">
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) =>
+                    `text-lg transition-colors duration-300 ${
+                      isActive
+                        ? "text-teal-300 border-b-2 border-white"
+                        : "hover:text-teal-500"
+                    }`
+                  }
+                >
                   Admin
-                </Link>
+                </NavLink>
               </li>
             )}
             {!isAuthenticated && (
               <li>
-                <Link to="/login" className="hover:text-teal">
+                <NavLink
+                  to="/login"
+                  className={({ isActive }) =>
+                    `text-lg transition-colors duration-300 ${
+                      isActive
+                        ? "text-teal-300 border-b-2 border-white"
+                        : "hover:text-teal-500"
+                    }`
+                  }
+                >
                   Login
-                </Link>
+                </NavLink>
               </li>
             )}
             {isAuthenticated && (
               <li>
                 <button
                   onClick={handleLogout}
-                  className="hover:text-teal cursor-pointer"
+                  className="text-lg transition-colors duration-300 hover:text-teal-300"
                 >
                   Logout
                 </button>
               </li>
             )}
             <li>
-              <Link to="/contact" className="hover:text-teal">
+              <NavLink
+                to="/contact"
+                className={({ isActive }) =>
+                  `text-lg transition-colors duration-300 ${
+                    isActive
+                      ? "text-teal-300 border-b-2 border-white"
+                      : "hover:text-teal-500"
+                  }`
+                }
+              >
                 Contact
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </nav>

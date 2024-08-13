@@ -49,14 +49,7 @@ const AdminPage = () => {
                   <FiHome className="mr-2" /> Home
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/admin"
-                  className="flex items-center py-2 px-4 bg-teal-500 text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-300"
-                >
-                  <FiSettings className="mr-2" /> Admin Dashboard
-                </Link>
-              </li>
+
               <li>
                 <Link
                   to="/photos"
